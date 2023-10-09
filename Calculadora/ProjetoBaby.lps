@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="ProjetoBaby.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <CursorPos Y="13"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="telaprinc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TelaPrinc"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="20"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="telasec.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FormTelaPrinc"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="TelaSec"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="7"/>
+        <CursorPos X="57" Y="10"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="8">
+      <Position>
+        <Filename Value="telasec.pas"/>
+        <Caret Line="19" Column="20"/>
+      </Position>
+      <Position>
+        <Filename Value="telasec.pas"/>
+        <Caret Line="23" Column="20"/>
+      </Position>
+      <Position>
+        <Filename Value="telasec.pas"/>
+        <Caret Line="24" Column="20"/>
+      </Position>
+      <Position>
+        <Filename Value="telasec.pas"/>
+        <Caret Line="25" Column="20"/>
+      </Position>
+      <Position>
+        <Filename Value="telasec.pas"/>
+        <Caret Line="26" Column="20"/>
+      </Position>
+      <Position>
+        <Filename Value="telasec.pas"/>
+        <Caret Line="13" Column="59"/>
+      </Position>
+      <Position>
+        <Filename Value="ProjetoBaby.lpr"/>
+        <Caret Line="13"/>
+      </Position>
+      <Position>
+        <Filename Value="telaprinc.pas"/>
+        <Caret Column="20"/>
+      </Position>
+      <Position>
+        <Filename Value="telasec.pas"/>
+        <Caret Line="10" Column="34"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+  <Debugging>
+    <BreakPoints>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="ProjetoBaby.lpr"/>
+        <Line Value="13"/>
+      </Item>
+    </BreakPoints>
+  </Debugging>
+</CONFIG>
