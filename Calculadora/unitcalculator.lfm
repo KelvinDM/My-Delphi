@@ -11,7 +11,6 @@ object Calculadora: TCalculadora
   OnCreate = FormCreate
   OnKeyPress = FormKeyPress
   OnShow = FormShow
-  LCLVersion = '2.2.6.0'
   object Button_10: TButton
     Left = 6
     Height = 57
@@ -94,6 +93,7 @@ object Calculadora: TCalculadora
     Top = 238
     Width = 75
     Caption = '1'
+    Color = clRed
     Font.Height = -13
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
