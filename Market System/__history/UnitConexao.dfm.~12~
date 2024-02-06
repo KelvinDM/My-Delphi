@@ -1,0 +1,29 @@
+object FormConexao: TFormConexao
+  Height = 480
+  Width = 640
+  object FDConnection: TFDConnection
+    Params.Strings = (
+      'Database=master'
+      'User_Name=master'
+      'Server=localhost'
+      'OSAuthent=Yes'
+      'DriverID=MSSQL')
+    Connected = True
+    LoginPrompt = False
+    Left = 56
+    Top = 296
+  end
+  object FDQueryClientes: TFDQuery
+    Active = True
+    Connection = FDConnection
+    SQL.Strings = (
+      'SELECT * FROM CLIENTES')
+    Left = 128
+    Top = 208
+  end
+  object DataSourceClientes: TDataSource
+    DataSet = FDQueryClientes
+    Left = 240
+    Top = 208
+  end
+end

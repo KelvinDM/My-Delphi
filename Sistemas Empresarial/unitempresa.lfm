@@ -1,0 +1,55 @@
+object Form2: TForm2
+  Left = 1616
+  Height = 415
+  Top = 31
+  Width = 583
+  Caption = 'Cadastro da empresa'
+  ClientHeight = 415
+  ClientWidth = 583
+  Position = poScreenCenter
+  object EditNomeEmpresa: TEdit
+    Left = 104
+    Height = 23
+    Top = 104
+    Width = 272
+    TabOrder = 0
+  end
+  object LabelNomeEmpresa: TLabel
+    Left = 17
+    Height = 15
+    Top = 112
+    Width = 84
+    Caption = 'Nome Empresa:'
+    ParentColor = False
+  end
+  object EditNomeEmpresa1: TEdit
+    Left = 104
+    Height = 23
+    Top = 144
+    Width = 144
+    TabOrder = 1
+  end
+  object LabelNomeEmpresa1: TLabel
+    Left = 17
+    Height = 15
+    Top = 152
+    Width = 85
+    Caption = 'Número celular:'
+    ParentColor = False
+  end
+  object LabelNomeEmpresa2: TLabel
+    Left = 17
+    Height = 15
+    Top = 192
+    Width = 43
+    Caption = 'Cidade: '
+    ParentColor = False
+  end
+  object EditNomeEmpresa2: TEdit
+    Left = 104
+    Height = 23
+    Top = 184
+    Width = 144
+    TabOrder = 2
+  end
+end

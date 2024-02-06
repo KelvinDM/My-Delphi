@@ -1,0 +1,40 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 321
+  HorizontalOffset = 1166
+  VerticalOffset = 31
+  Width = 499
+  object MSSQLConnection: TMSSQLConnection
+    Connected = False
+    LoginPrompt = False
+    DatabaseName = 'localhost'
+    KeepConnection = False
+    HostName = 'localhost'
+    Left = 264
+    Top = 136
+  end
+  object ZConnection1: TZConnection
+    ControlsCodePage = cCP_UTF8
+    AutoEncodeStrings = True
+    HostName = 'localhost'
+    Port = 1433
+    User = 'sa'
+    Protocol = 'ado'
+    Left = 24
+    Top = 16
+  end
+  object ZQuery1: TZQuery
+    Params = <>
+    Left = 24
+    Top = 64
+  end
+  object ZUpdateSQL1: TZUpdateSQL
+    UseSequenceFieldForRefreshSQL = False
+    Left = 24
+    Top = 128
+  end
+  object DataSource1: TDataSource
+    Left = 88
+    Top = 16
+  end
+end

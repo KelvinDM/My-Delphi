@@ -1,0 +1,58 @@
+unit UnitConexao;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.ODBC,
+  FireDAC.Phys.ODBCDef, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client,
+  FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef, FireDAC.Comp.UI,
+  FireDAC.Phys.ODBCBase, FireDAC.Comp.ScriptCommands, FireDAC.Stan.Util,
+  FireDAC.Comp.Script, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
+  FireDAC.DApt, FireDAC.Comp.DataSet;
+
+type
+  TFormConexao = class(TDataModule)
+    FDConnection: TFDConnection;
+    FDQueryClientes: TFDQuery;
+    DataSourceClientes: TDataSource;
+    FDQueryProdutos: TFDQuery;
+    DataSourceProdutos: TDataSource;
+    FDQueryProdutosID: TFDAutoIncField;
+    FDQueryProdutosDESCRICAO: TStringField;
+    FDQueryProdutosVALOR_VENDA: TFloatField;
+    FDQueryProdutosSALDO_ESTOQUE: TIntegerField;
+    FDQueryClientesID: TFDAutoIncField;
+    FDQueryClientesNOME_CLIENTE: TStringField;
+    FDQueryClientesDATA_NASCIMENTO: TDateField;
+    FDQueryClientesNUMERO_TELEFONE: TStringField;
+    FDQueryClientesNUMERO_CELULAR: TStringField;
+    FDQueryVenda: TFDQuery;
+    FDAutoIncField1: TFDAutoIncField;
+    StringField1: TStringField;
+    FloatField1: TFloatField;
+    IntegerField1: TIntegerField;
+    FDQueryItensVenda: TFDQuery;
+    FDAutoIncField2: TFDAutoIncField;
+    StringField2: TStringField;
+    FloatField2: TFloatField;
+    IntegerField2: TIntegerField;
+    DataSourceVenda: TDataSource;
+    DataSourceItensVenda: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormConexao: TFormConexao;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+end.

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="EmpresaMain.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="47" Y="13"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="telamain.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="TelaMain"/>
+        <TopLine Value="4"/>
+        <CursorPos X="25" Y="9"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="unitempresa.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form2"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="UnitEmpresa"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="49" Y="16"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="29">
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="31" Column="28" TopLine="12"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="32" Column="28" TopLine="12"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="33" Column="28" TopLine="12"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="32" Column="28" TopLine="12"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="31" Column="28" TopLine="12"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="33" Column="28" TopLine="12"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="42" Column="18" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="43" Column="18" TopLine="25"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="44" Column="18" TopLine="26"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="45" Column="18" TopLine="27"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="46" Column="18" TopLine="28"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="47" Column="18" TopLine="29"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="48" Column="18" TopLine="30"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="49" Column="18" TopLine="31"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="48" Column="18" TopLine="30"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="47" Column="18" TopLine="29"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="46" Column="18" TopLine="28"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="45" Column="18" TopLine="27"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="44" Column="18" TopLine="26"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="43" Column="18" TopLine="25"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="42" Column="18" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="43" Column="18" TopLine="25"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="44" Column="18" TopLine="26"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="43" Column="18" TopLine="25"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="42" Column="18" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="43" Column="18" TopLine="25"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="45" Column="18" TopLine="26"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="59" Column="5" TopLine="32"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="47" Column="53" TopLine="33"/>
+      </Position>
+      <Position>
+        <Filename Value="telamain.pas"/>
+        <Caret Line="67" Column="21" TopLine="45"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

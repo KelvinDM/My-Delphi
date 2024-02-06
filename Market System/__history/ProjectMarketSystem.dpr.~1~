@@ -1,0 +1,14 @@
+program ProjectMarketSystem;
+
+uses
+  Vcl.Forms,
+  Unit_Princ in '..\..\Embarcadero\Studio\Projects\Unit_Princ.pas' {HomeScreen};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(THomeScreen, HomeScreen);
+  Application.Run;
+end.
