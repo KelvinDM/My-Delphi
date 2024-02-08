@@ -2,18 +2,20 @@
 <BorlandProject>
 	<Transactions>
     <Transaction>2024/02/02 18:04:18.000.252,=C:\Users\Thays\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2024/02/02 19:08:55.000.610,C:\Users\Thays\Documents\Embarcadero\Studio\Projects\Unit_Princ.pas=C:\Users\Thays\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2024/02/02 19:08:55.000.610,C:\Users\Thays\Documents\Embarcadero\Studio\Projects\Unit_Princ.dfm=C:\Users\Thays\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
-    <Transaction>2024/02/03 02:25:14.000.884,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\ProjectMarketSystem.dproj=C:\Users\Thays\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2024/02/02 19:08:55.000.610,C:\Users\Thays\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Users\Thays\Documents\Embarcadero\Studio\Projects\Unit_Princ.dfm</Transaction>
+    <Transaction>2024/02/02 19:08:55.000.610,C:\Users\Thays\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\Thays\Documents\Embarcadero\Studio\Projects\Unit_Princ.pas</Transaction>
+    <Transaction>2024/02/03 02:25:14.000.884,C:\Users\Thays\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\ProjectMarketSystem.dproj</Transaction>
     <Transaction>2024/02/03 10:50:41.000.121,=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.pas</Transaction>
-    <Transaction>2024/02/03 11:05:46.000.563,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.dfm=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\UnitCadastro.dfm</Transaction>
-    <Transaction>2024/02/03 11:05:46.000.563,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.pas=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\UnitCadastro.pas</Transaction>
+    <Transaction>2024/02/03 11:05:46.000.563,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\UnitCadastro.dfm=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.dfm</Transaction>
+    <Transaction>2024/02/03 11:05:46.000.563,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\UnitCadastro.pas=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.pas</Transaction>
     <Transaction>2024/02/03 12:20:05.000.688,=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.pas</Transaction>
-    <Transaction>2024/02/03 12:20:43.000.772,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.dfm=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\UnitConexao.dfm</Transaction>
-    <Transaction>2024/02/03 12:20:43.000.772,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.pas=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\UnitConexao.pas</Transaction>
+    <Transaction>2024/02/03 12:20:43.000.772,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\UnitConexao.pas=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.pas</Transaction>
+    <Transaction>2024/02/03 12:20:43.000.772,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\UnitConexao.dfm=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.dfm</Transaction>
     <Transaction>2024/02/05 23:36:45.000.981,=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.pas</Transaction>
     <Transaction>2024/02/05 23:37:40.000.472,=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.pas</Transaction>
-    <Transaction>2024/02/05 23:43:45.000.173,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\UnitVendas.pas=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.pas</Transaction>
-    <Transaction>2024/02/05 23:43:45.000.173,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\UnitVendas.dfm=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.dfm</Transaction>
+    <Transaction>2024/02/05 23:43:45.000.173,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.pas=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\UnitVendas.pas</Transaction>
+    <Transaction>2024/02/05 23:43:45.000.173,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.dfm=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\UnitVendas.dfm</Transaction>
+    <Transaction>2024/02/07 13:59:26.000.621,=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.pas</Transaction>
+    <Transaction>2024/02/07 13:59:57.000.310,C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Unit1.pas=C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\UnitFuncoesDiversas.pas</Transaction>
   </Transactions>
 </BorlandProject>

@@ -5,7 +5,8 @@ uses
   Unit_Princ in '..\..\Embarcadero\Studio\Projects\Unit_Princ.pas' {HomeScreen},
   UnitCadastro in 'UnitCadastro.pas' {FormCadastros},
   UnitConexao in 'UnitConexao.pas' {FormConexao: TDataModule},
-  UnitVendas in 'UnitVendas.pas' {FormVendas};
+  UnitVendas in 'UnitVendas.pas' {FormVendas},
+  UnitFuncoesDiversas in 'UnitFuncoesDiversas.pas';
 
 {$R *.res}
 

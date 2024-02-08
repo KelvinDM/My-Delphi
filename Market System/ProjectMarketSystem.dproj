@@ -141,6 +141,7 @@
             <Form>FormVendas</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="UnitFuncoesDiversas.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

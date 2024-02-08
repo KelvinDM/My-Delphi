@@ -26,7 +26,6 @@ object FormCadastros: TFormCadastros
     Color = 1644825
     ParentBackground = False
     TabOrder = 0
-    ExplicitTop = -3
     object PanelBotaoClientes: TPanel
       Left = 0
       Top = 0
@@ -136,8 +135,6 @@ object FormCadastros: TFormCadastros
       OnClick = PanelBotaoFecharClick
       OnMouseEnter = PanelBotaoFecharMouseEnter
       OnMouseLeave = PanelBotaoFecharMouseLeave
-      ExplicitLeft = 960
-      ExplicitHeight = 85
     end
   end
   object PageControlClientePrinc: TPageControl

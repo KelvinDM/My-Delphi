@@ -34,7 +34,6 @@ type
     DataSourceItensVenda: TDataSource;
     FDQueryVendaID: TFDAutoIncField;
     FDQueryVendaID_CLIENTE: TIntegerField;
-    FDQueryVendaID_PRODUTO: TIntegerField;
     FDQueryVendaVALOR_TOTAL: TFloatField;
     FDQueryVendaDATA_VENDA: TDateField;
     FDQueryVendaDESCONTO_PERC: TBCDField;
@@ -45,6 +44,13 @@ type
     FDQueryItensVendaQUANTIDADE: TIntegerField;
     FDQueryItensVendaPRECO_UNITARIO: TBCDField;
     FDQueryItensVendaDESCONTO: TBCDField;
+    FDQueryItensVendaSUBTOTAL: TBCDField;
+    FDQueryItensVendaVALOR_TOTAL: TBCDField;
+    FDQueryItensVendaDistinto: TFDQuery;
+    DataSourceItensVendaDistintos: TDataSource;
+    FDQueryItensVendaDistintoID: TIntegerField;
+    FDQueryItensVendaDistintoPRODUTO_ID: TIntegerField;
+    FDQueryItensVendaDistintoPRECO_UNITARIO: TBCDField;
   private
     { Private declarations }
   public

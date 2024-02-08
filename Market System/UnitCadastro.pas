@@ -391,7 +391,7 @@ begin
                 PanelBuscaClientes.Enabled:= True;
                 PanelBotaoDeletar.Enabled:= True;
                 PanelBotaoNovoCad.Enabled:= True;
-
+                PanelBotaoAlterar.Enabled:= True;
                 //Atualiza grid
                 DBGridCadClientes.Refresh;
             except
@@ -432,7 +432,7 @@ begin
                 FormConexao.FDQueryProdutos.Post;
                 FormConexao.FDConnection.Commit;
                 FormConexao.FDQueryProdutos.Refresh;
-                ShowMessage('Cliente gravado com sucesso!');
+                ShowMessage('Produto gravado com sucesso!');
 
                 //Cadastro não-editável após gravar
                 DBEditDescricaoProduto.Enabled:= False;

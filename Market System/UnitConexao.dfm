@@ -83,7 +83,6 @@ object FormConexao: TFormConexao
     Top = 80
   end
   object FDQueryVenda: TFDQuery
-    Active = True
     Connection = FDConnection
     SQL.Strings = (
       'SELECT * FROM VENDAS')
@@ -97,10 +96,6 @@ object FormConexao: TFormConexao
     object FDQueryVendaID_CLIENTE: TIntegerField
       FieldName = 'ID_CLIENTE'
       Origin = 'ID_CLIENTE'
-    end
-    object FDQueryVendaID_PRODUTO: TIntegerField
-      FieldName = 'ID_PRODUTO'
-      Origin = 'ID_PRODUTO'
     end
     object FDQueryVendaVALOR_TOTAL: TFloatField
       FieldName = 'VALOR_TOTAL'
@@ -159,15 +154,70 @@ object FormConexao: TFormConexao
       Precision = 10
       Size = 2
     end
+    object FDQueryItensVendaSUBTOTAL: TBCDField
+      FieldName = 'SUBTOTAL'
+      Origin = 'SUBTOTAL'
+      Precision = 10
+      Size = 2
+    end
+    object FDQueryItensVendaVALOR_TOTAL: TBCDField
+      FieldName = 'VALOR_TOTAL'
+      Origin = 'VALOR_TOTAL'
+      Precision = 10
+      Size = 2
+    end
   end
   object DataSourceVenda: TDataSource
     DataSet = FDQueryVenda
     Left = 344
-    Top = 88
+    Top = 80
   end
   object DataSourceItensVenda: TDataSource
     DataSet = FDQueryItensVenda
     Left = 472
-    Top = 88
+    Top = 80
+  end
+  object FDQueryItensVendaDistinto: TFDQuery
+    Connection = FDConnection
+    SQL.Strings = (
+      'SELECT MAX(ID) AS "ID" ,'
+      #9#9'MAX(PRODUTO_ID) AS "PRODUTO_ID" , '
+      #9#9'MAX(PRECO_UNITARIO) AS "PRECO_UNITARIO"'
+      'FROM ITENS_VENDA'
+      'WHERE NUMERO_CONTROLE = :NUMCTR'
+      'GROUP BY PRODUTO_ID;'
+      '')
+    Left = 112
+    Top = 216
+    ParamData = <
+      item
+        Name = 'NUMCTR'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = Null
+      end>
+    object FDQueryItensVendaDistintoID: TIntegerField
+      FieldName = 'ID'
+      Origin = 'ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      ReadOnly = True
+    end
+    object FDQueryItensVendaDistintoPRODUTO_ID: TIntegerField
+      FieldName = 'PRODUTO_ID'
+      Origin = 'PRODUTO_ID'
+      ReadOnly = True
+    end
+    object FDQueryItensVendaDistintoPRECO_UNITARIO: TBCDField
+      FieldName = 'PRECO_UNITARIO'
+      Origin = 'PRECO_UNITARIO'
+      ReadOnly = True
+      Precision = 10
+      Size = 2
+    end
+  end
+  object DataSourceItensVendaDistintos: TDataSource
+    DataSet = FDQueryItensVendaDistinto
+    Left = 112
+    Top = 272
   end
 end
