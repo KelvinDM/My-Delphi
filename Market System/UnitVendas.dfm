@@ -101,7 +101,6 @@ object FormVendas: TFormVendas
       Height = 790
       Align = alLeft
       TabOrder = 0
-      ExplicitTop = 3
       object Cliente: TLabel
         Left = 6
         Top = 81
@@ -283,7 +282,7 @@ object FormVendas: TFormVendas
       end
       object ButtonBuscaCliente: TButton
         Left = 348
-        Top = 85
+        Top = 77
         Width = 75
         Height = 36
         Caption = 'Buscar'
@@ -366,7 +365,7 @@ object FormVendas: TFormVendas
         Width = 854
         Height = 233
         Align = alBottom
-        DataSource = FormConexao.DataSourceItensVenda
+        DataSource = FormConexao.DataSourceItensVendaAux
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -385,59 +384,48 @@ object FormVendas: TFormVendas
             Alignment = taCenter
             Expanded = False
             FieldName = 'PRODUTO_ID'
-            ReadOnly = True
             Title.Alignment = taCenter
-            Title.Caption = 'C'#243'digo Produto'
-            Width = 92
+            Title.Caption = 'C'#243'd.Produto'
             Visible = True
           end
           item
             Alignment = taCenter
             Expanded = False
             FieldName = 'QUANTIDADE'
-            ReadOnly = True
             Title.Alignment = taCenter
             Title.Caption = 'Quantidade'
-            Width = 100
             Visible = True
           end
           item
             Alignment = taCenter
             Expanded = False
             FieldName = 'PRECO_UNITARIO'
-            ReadOnly = True
             Title.Alignment = taCenter
-            Title.Caption = 'Valor Unid.'
+            Title.Caption = 'Valor .Unid'
             Visible = True
           end
           item
             Alignment = taCenter
             Expanded = False
             FieldName = 'DESCONTO'
-            ReadOnly = True
             Title.Alignment = taCenter
-            Title.Caption = 'Valor Desconto'
-            Width = 96
+            Title.Caption = 'Desconto'
             Visible = True
           end
           item
             Alignment = taCenter
             Expanded = False
             FieldName = 'SUBTOTAL'
-            ReadOnly = True
             Title.Alignment = taCenter
             Title.Caption = 'Subtotal'
-            Width = 91
             Visible = True
           end
           item
             Alignment = taCenter
             Expanded = False
             FieldName = 'VALOR_TOTAL'
-            ReadOnly = True
             Title.Alignment = taCenter
             Title.Caption = 'Valor Total'
-            Width = 97
             Visible = True
           end>
       end
@@ -518,7 +506,8 @@ object FormVendas: TFormVendas
         Height = 66
         Cursor = crHandPoint
         Caption = 'Atualizar Valor Total'
-        Color = 10928383
+        Color = clSilver
+        Enabled = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWhite
         Font.Height = -12

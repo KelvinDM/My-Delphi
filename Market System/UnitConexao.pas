@@ -46,11 +46,17 @@ type
     FDQueryItensVendaDESCONTO: TBCDField;
     FDQueryItensVendaSUBTOTAL: TBCDField;
     FDQueryItensVendaVALOR_TOTAL: TBCDField;
-    FDQueryItensVendaDistinto: TFDQuery;
-    DataSourceItensVendaDistintos: TDataSource;
-    FDQueryItensVendaDistintoID: TIntegerField;
-    FDQueryItensVendaDistintoPRODUTO_ID: TIntegerField;
-    FDQueryItensVendaDistintoPRECO_UNITARIO: TBCDField;
+    FDQueryItensVendaAux: TFDQuery;
+    FDAutoIncField1: TFDAutoIncField;
+    IntegerField1: TIntegerField;
+    IntegerField2: TIntegerField;
+    IntegerField3: TIntegerField;
+    BCDField1: TBCDField;
+    BCDField2: TBCDField;
+    BCDField3: TBCDField;
+    BCDField4: TBCDField;
+    DataSourceItensVendaAux: TDataSource;
+    procedure FDQueryItensVendaDistintoAfterPost(DataSet: TDataSet);
   private
     { Private declarations }
   public
@@ -65,5 +71,11 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
+procedure TFormConexao.FDQueryItensVendaDistintoAfterPost(DataSet: TDataSet);
+begin
+    FormConexao.FDQueryItensVendaAux.Close;
+    FormConexao.FDQueryItensVendaAux.Open;
+end;
 
 end.

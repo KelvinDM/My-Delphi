@@ -85,10 +85,13 @@ var
     AuxCodProduto, QuantidadeItem, CodCliente, QueryOriginal : String;
     ValorProduto, TotalVenda,TotalVendaItem, ValorItem, RateioItemDesc, RateioValorDesconto: Currency;
     ValorItemSubTotal :Currency;
+    CodIdVenda,CodProduto : integer;
 begin
+    CodIdVenda := StrToInt(EditCodigoVenda.Text);
     CodCliente := Trim(EditCodCliente.Text);
     QuantidadeItem := Trim(EditQuantidade.Text) ;
     AuxCodProduto := Trim(EditCodProduto.Text);
+    CodProduto:= StrToInt(EditCodProduto.Text);
 
     if (CodCliente = '' )  then
     begin
@@ -101,7 +104,7 @@ begin
         Exit;
     end;
     
-    if QuantidadeItem <> '' then
+    if (QuantidadeItem <> '') and (QuantidadeItem <> '0') then
     begin
         FormConexao.FDQueryProdutos.Close;
         QueryOriginal := FormConexao.FDQueryProdutos.SQL.Text;
@@ -133,27 +136,50 @@ begin
 
 
     //Calculo para venda
-    TotalVendaItem := StrToFloat(QuantidadeItem) *  ValorProduto;  // 2 * 150 = 300
-    
-    if FormConexao.FDQueryItensVenda.Locate('PRODUTO_ID',AuxCodProduto ) then
+    TotalVendaItem := StrToInt(QuantidadeItem) *  ValorProduto;  // 2 * 150 = 300
+
+    //Conectando com o Dbgrid
+    With FormConexao do
     begin
-        FormConexao.FDQueryItensVenda.Edit; 
-        FormConexao.FDQueryItensVenda.FieldByName('QUANTIDADE').Asinteger := FormConexao.FDQueryItensVenda.FieldByName('QUANTIDADE').Asinteger + StrToInt(EditQuantidade.Text);
-        FormConexao.FDQueryItensVenda.FieldByName('SUBTOTAL').AsCurrency := FormConexao.FDQueryItensVenda.FieldByName('SUBTOTAL').AsCurrency + TotalVendaItem;
-        FormConexao.FDQueryItensVenda.Post;
-    end
-    else
-    begin
-        FormConexao.FDQueryItensVenda.Insert;
-        FormConexao.FDQueryItensVenda.FieldByName('VENDA_ID').AsInteger := StrToInt(EditCodigoVenda.text);
-        FormConexao.FDQueryItensVenda.FieldByName('PRODUTO_ID').AsInteger := StrToInt (EditCodProduto.Text);
-        FormConexao.FDQueryItensVenda.FieldByName('QUANTIDADE').AsInteger := StrToInt (EditQuantidade.Text);
-        FormConexao.FDQueryItensVenda.FieldByName('PRECO_UNITARIO').AsCurrency := ValorProduto;
-        FormConexao.FDQueryItensVenda.FieldByName('SUBTOTAL').AsCurrency := TotalVendaItem;
-        //Commit
-        FormConexao.FDQueryItensVenda.Post;
-        FormConexao.FDConnection.Commit;        
-    end;   
+        FDQueryItensVendaAux.Params[0].AsInteger := CodIdVenda;
+        FDQueryItensVendaAux.Open;
+        if FDQueryItensVendaAux.RecordCount > 0 then
+        begin
+            if FormConexao.FDQueryItensVendaAux.Locate('VENDA_ID;PRODUTO_ID',VarArrayOf([CodIdVenda,CodProduto]),[]) then
+            begin
+                // AuxCodProduto
+                FDQueryItensVendaAux.Edit;
+                FDQueryItensVendaAux.FieldByName('QUANTIDADE').Asinteger := FDQueryItensVendaAux.FieldByName('QUANTIDADE').Asinteger + StrToInt(EditQuantidade.Text);
+                FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency := FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency + TotalVendaItem;
+                FDQueryItensVendaAux.Post;
+                FDConnection.Commit;
+            end
+            else
+            begin
+                FDQueryItensVendaAux.Insert;
+                FDQueryItensVendaAux.FieldByName('VENDA_ID').AsInteger := StrToInt(EditCodigoVenda.text);
+                FDQueryItensVendaAux.FieldByName('PRODUTO_ID').AsInteger := StrToInt (EditCodProduto.Text);
+                FDQueryItensVendaAux.FieldByName('QUANTIDADE').AsInteger := StrToInt (EditQuantidade.Text);
+                FDQueryItensVendaAux.FieldByName('PRECO_UNITARIO').AsCurrency := ValorProduto;
+                FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency := TotalVendaItem;
+                //Commit
+                FDQueryItensVendaAux.Post;
+                FDConnection.Commit;
+            end;
+        end
+        else
+        begin
+            FDQueryItensVendaAux.Insert;
+            FDQueryItensVendaAux.FieldByName('VENDA_ID').AsInteger := StrToInt(EditCodigoVenda.text);
+            FDQueryItensVendaAux.FieldByName('PRODUTO_ID').AsInteger := StrToInt (EditCodProduto.Text);
+            FDQueryItensVendaAux.FieldByName('QUANTIDADE').AsInteger := StrToInt (EditQuantidade.Text);
+            FDQueryItensVendaAux.FieldByName('PRECO_UNITARIO').AsCurrency := ValorProduto;
+            FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency := TotalVendaItem;
+            //Commit
+            FDQueryItensVendaAux.Post;
+            FDConnection.Commit;
+        end;
+    end;
 
         
 
@@ -161,14 +187,14 @@ begin
     //Obter o total da venda de todos os itens sem o desconto
     With FormConexao do
     begin
-        FDQueryItensVenda.First ;
+        FDQueryItensVendaAux.First ;
         TotalVenda := 0;
 
-        while not FDQueryItensVenda.Eof do
+        while not FDQueryItensVendaAux.Eof do
         begin
 
-            TotalVenda := TotalVenda + FDQueryItensVenda.FieldByName('SUBTOTAL').AsCurrency;          
-            FormConexao.FDQueryItensVenda.Next;
+            TotalVenda := TotalVenda + FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency;
+            FormConexao.FDQueryItensVendaAux.Next;
         end;
     end;
   
@@ -176,32 +202,32 @@ begin
 //--------------------------------------------
     With FormConexao do
     begin
-        FDQueryItensVenda.First;
-        while not FDQueryItensVenda.Eof do
+        FDQueryItensVendaAux.First;
+        while not FDQueryItensVendaAux.Eof do
         begin
-            ValorItemSubTotal := FDQueryItensVenda.FieldByName('SUBTOTAL').AsCurrency;
+            ValorItemSubTotal := FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency;
             RateioItemDesc := ValorItemSubTotal / TotalVenda;
 
             RateioValorDesconto := RateioItemDesc * StrToCurr(EditDescontoTotal.Text);
 
-            FDQueryItensVenda.Edit; 
-            FDQueryItensVenda.FieldByName('DESCONTO').AsCurrency := Round(RateioValorDesconto);
+            FDQueryItensVendaAux.Edit;
+            FDQueryItensVendaAux.FieldByName('DESCONTO').AsCurrency := Round(RateioValorDesconto);
             TotalVenda := TotalVenda - RateioValorDesconto;
             
-            FDQueryItensVenda.Post;
-            FDQueryItensVenda.Next;
+            FDQueryItensVendaAux.Post;
+            FDQueryItensVendaAux.Next;
         end;
     end;
 
 
     //Arredonda venda
     TotalVenda := Ceil(TotalVenda);
+
     //Atualizando total da venda
     EditValorTotal.Text :=  FloatToStrF(TotalVenda, ffNumber, 15, 2);
 
-
     FormConexao.FDQueryProdutos.SQL.Text := QueryOriginal;
-    FormConexao.FDQueryItensVenda.Refresh;
+    FormConexao.FDQueryItensVendaAux.Refresh;
     DBGridItemVenda.Refresh;
 end;
 
@@ -237,21 +263,23 @@ end;
 
 procedure TFormVendas.PanelBotaoVerificarEstoqueClick(Sender: TObject);
 var
-    CodProduto : String;
+    CodProduto, QueryOriginal : String;
 begin
     try
         CodProduto :=  Trim(EditCodProduto.Text);
         if CodProduto<> '' then
         begin
             FormConexao.FDQueryProdutos.Close;
+            QueryOriginal := FormConexao.FDQueryProdutos.SQL.Text;
             FormConexao.FDQueryProdutos.SQL.Text := 'SELECT * FROM PRODUTOS WHERE ID= :IDPROD ';
             FormConexao.FDQueryProdutos.ParamByName('IDPROD').AsInteger := StrToInt(CodProduto);
             FormConexao.FDQueryProdutos.Open;
 
             if not FormConexao.FDQueryProdutos.IsEmpty then
                 ShowMessage('Produto: ' + FormConexao.FDQueryProdutos.FieldByName('DESCRICAO').AsString + sLineBreak +
-                 'SALDO EM ESTOQUE: ' + FormConexao.FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsString)
+                 'SALDO EM ESTOQUE: ' + FormConexao.FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsString);
 
+            FormConexao.FDQueryProdutos.SQL.Text:= QueryOriginal;
         end
         else
             ShowMessage('Código do produto não selecionado.!!');
@@ -326,61 +354,68 @@ end;
 
 procedure TFormVendas.PanelAtualizarValorTotalClick(Sender: TObject);
 var
-    AuxCodProduto, QuantidadeItem, CodCliente, QueryOriginal : String;
-    ValorProduto, TotalVenda,TotalVendaItem, ValorItem, RateioItemDesc, RateioValorDesconto: Currency;
-    ValorItemSubTotal :Currency;
+    TotalVenda, RateioItemDesc, RateioValorDesconto, ValorItemSubTotal, CampoDescTotal,CampoValorTotal: Currency;
 begin
+
+    CampoDescTotal := StrParaFloat(EditDescontoTotal.Text);
+
     //Obter o total da venda de todos os itens sem o desconto
     With FormConexao do
     begin
-        FDQueryItensVenda.First ;
+        FDQueryItensVendaAux.First ;
         TotalVenda := 0;
 
-        while not FDQueryItensVenda.Eof do
+        while not FDQueryItensVendaAux.Eof do
         begin
 
-            TotalVenda := TotalVenda + FDQueryItensVenda.FieldByName('SUBTOTAL').AsCurrency;          
-            FormConexao.FDQueryItensVenda.Next;
+            TotalVenda := TotalVenda + FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency;
+            FormConexao.FDQueryItensVendaAux.Next;
         end;
     end;
-  
+
+    if  (CampoDescTotal > TotalVenda) then
+    begin
+        MessageDlg('Erro: O valor do desconto informado é maior do que o valor total da venda!',mtError, [mbOK], 0, mbOK);
+        Exit;
+    end;
+
+
+
     // Calculo realizado de rateio para proporção em cada item
     With FormConexao do
     begin
-        FDQueryItensVenda.First;
-        while not FDQueryItensVenda.Eof do
+        FDQueryItensVendaAux.First;
+        while not FDQueryItensVendaAux.Eof do
         begin
-            ValorItemSubTotal := FDQueryItensVenda.FieldByName('SUBTOTAL').AsCurrency;
+            ValorItemSubTotal := FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency;
             RateioItemDesc := ValorItemSubTotal / TotalVenda;
+            RateioValorDesconto := RoundTo(RateioItemDesc, -3) * StrToFloat(EditDescontoTotal.Text);
 
-            RateioValorDesconto := RateioItemDesc * StrToCurr(EditDescontoTotal.Text);
-
-            FDQueryItensVenda.Edit; 
-            FDQueryItensVenda.FieldByName('DESCONTO').AsCurrency := Round(RateioValorDesconto);
+            FDQueryItensVendaAux.Edit;
+            FDQueryItensVendaAux.FieldByName('DESCONTO').AsCurrency := RoundTo(RateioValorDesconto, -2);
             TotalVenda := TotalVenda - RateioValorDesconto;
-            
-            FDQueryItensVenda.Post;
-            FDQueryItensVenda.Next;
+
+            FDQueryItensVendaAux.Post;
+            FDQueryItensVendaAux.Next;
         end;
     end;
 
-
-    //Arredonda venda
-    TotalVenda := Ceil(TotalVenda);
     //Atualizando total da venda
     EditValorTotal.Text :=  FloatToStrF(TotalVenda, ffNumber, 15, 2);
 
 
-    FormConexao.FDQueryProdutos.SQL.Text := QueryOriginal;
-    FormConexao.FDQueryItensVenda.Refresh;
+    FormConexao.FDQueryItensVendaAux.Refresh;
     DBGridItemVenda.Refresh;
 end;
 
 procedure TFormVendas.PanelBotaoCancelarVendaClick(Sender: TObject);
+var
+    CodigoVenda: Integer;
 begin
     //CancelarVenda
     if EditCodigoVenda.Text <> '' then
     begin
+        CodigoVenda:= StrToInt(EditCodigoVenda.Text);
         EditNomeClienteVenda.Enabled := True;
         EditNomeProduto.Enabled := True;
         ButtonBuscaCliente.Enabled:= True;
@@ -392,24 +427,38 @@ begin
         EditNomeClienteVenda.Text := '';
         EditQuantidade.Text := '';
 
-        FormConexao.FDQueryItensVenda.Close;
-        FormConexao.FDQueryItensVenda.Open;
-        if FormConexao.FDQueryItensVenda.Locate('VENDA_ID', EditCodigoVenda.Text, []) then
+        //Deletando Itens :)
+        With FormConexao do
         begin
-            FormConexao.FDQueryVenda.Delete;
+            FDQueryItensVendaAux.Params[0].AsInteger := CodigoVenda;
+            FDQueryItensVendaAux.Open;
+            while not FDQueryItensVendaAux.Eof do
+            begin
+                if FDQueryItensVendaAux.Locate('VENDA_ID', CodigoVenda, []) then
+                    FDQueryItensVendaAux.Delete
+                else
+                    FDQueryItensVendaAux.Next;
+            end;
             EditCodigoVenda.Text := '';
-            FormConexao.FDQueryItensVenda.Close;
+            FDQueryItensVendaAux.Close;
         end;
 
-
-        FormConexao.FDQueryVenda.Close; 
-        FormConexao.FDQueryVenda.Open;
-        if FormConexao.FDQueryVenda.Locate('ID', EditCodigoVenda.Text, []) then
+        //Deletando Venda(s) :)
+        With FormConexao do
         begin
-            FormConexao.FDQueryVenda.Delete;
+            while not FDQueryVenda.Eof do
+            begin
+                FDQueryVenda.Close;
+                FDQueryVenda.Open;
+                if FDQueryVenda.Locate('ID', CodigoVenda, []) then
+                    FDQueryVenda.Delete
+                else
+                    FDQueryVenda.Next;
+            end;
             EditCodigoVenda.Text := '';
-            FormConexao.FDQueryVenda.Close;
+            FDQueryVenda.Close;
         end;
+
     end;
   
 end;
@@ -432,9 +481,6 @@ end;
 procedure TFormVendas.FormCreate(Sender: TObject);
 begin
     RbValorReal.Checked := True;
-
-
-    
     EditDescontoTotal.Text := '10,00'; //APAGAR TESTES
     EditQuantidade.Text := '2';   //APAGAR TESTES
 end;
@@ -456,11 +502,53 @@ end;
 
 
 procedure TFormVendas.PanelExcluitItemClick(Sender: TObject);
+var
+    TotalVenda, ValorItemSubTotal, RateioValorDesconto, RateioItemDesc: Currency;
 begin
 //
-    FormConexao.FDQueryItensVenda.Delete;
+    FormConexao.FDQueryItensVendaAux.Delete;
     FormConexao.FDConnection.Commit;
-    FormConexao.FDQueryItensVenda.Refresh;
+    FormConexao.FDQueryItensVendaAux.Refresh;
+
+
+    //Obter o total da venda de todos os itens sem o desconto
+    With FormConexao do
+    begin
+        FDQueryItensVendaAux.First ;
+        TotalVenda := 0;
+
+        while not FDQueryItensVendaAux.Eof do
+        begin
+
+            TotalVenda := TotalVenda + FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency;
+            FormConexao.FDQueryItensVendaAux.Next;
+        end;
+    end;
+
+
+    // Calculo realizado de rateio para proporção em cada item
+    With FormConexao do
+    begin
+        FDQueryItensVendaAux.First;
+        while not FDQueryItensVendaAux.Eof do
+        begin
+            ValorItemSubTotal := FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency;
+            RateioItemDesc := ValorItemSubTotal / TotalVenda;
+            RateioValorDesconto := RoundTo(RateioItemDesc, -3) * StrToFloat(EditDescontoTotal.Text);
+
+            FDQueryItensVendaAux.Edit;
+            FDQueryItensVendaAux.FieldByName('DESCONTO').AsCurrency := RoundTo(RateioValorDesconto, -2);
+            TotalVenda := TotalVenda - RateioValorDesconto;
+
+            FDQueryItensVendaAux.Post;
+            FDQueryItensVendaAux.Next;
+        end;
+    end;
+
+    //Atualizando total da venda
+    EditValorTotal.Text :=  FloatToStrF(TotalVenda, ffNumber, 15, 2);
+
+    FormConexao.FDQueryItensVendaAux.Refresh;
 end;
 
 procedure TFormVendas.ButtonBuscaProdutoClick(Sender: TObject);
@@ -519,14 +607,19 @@ begin
                     EditNomeClienteVenda.Enabled := False;
                     ButtonBuscaCliente.Enabled := False;
                     InserirVenda := True;
-                    
+
                     FormConexao.FDQueryClientes.Close;
+
+
                     FormConexao.FDQueryVenda.Open;
                     FormConexao.FDQueryVenda.Insert;
                     FormConexao.FDQueryVenda.FieldByName('ID_CLIENTE').AsInteger := ClienteID;
                     FormConexao.FDQueryVenda.Post;
                     FormConexao.FDConnection.Commit;
-                    EditCodigoVenda.Text :=  FormConexao.FDQueryVenda.FieldByName('ID').AsString;                         
+                    EditCodigoVenda.Text :=  FormConexao.FDQueryVenda.FieldByName('ID').AsString;
+
+
+
                 end
                 else
                 begin
@@ -585,6 +678,19 @@ var
     Valor: Double;
 begin
 
+    if EditValorTotal.Text <> '' then
+    begin
+        PanelAtualizarValorTotal.Enabled :=  True;
+        PanelAtualizarValorTotal.Color := $00004DFF;
+    end
+    else
+    begin
+        PanelAtualizarValorTotal.Enabled :=  False;
+        PanelAtualizarValorTotal.Color := clSilver;
+    end;
+
+
+
     if RbPorcentagem.Checked then
         PermitirApenasNumeros(Key);
     if RbValorReal.Checked then
@@ -596,7 +702,7 @@ begin
             Valor := StrParaFloat(EditDescontoTotal.Text)
         else
             Valor := 0.00;
-        //EditDescontoTotal.Text := FormatFloat('#,##0.00', Valor);
+
         EditDescontoTotal.Text := FloatToStrF(Valor, ffNumber, 15, 2);
         EditDescontoTotal.SelStart := Length(EditDescontoTotal.Text); //Indicador de texto a direita
     end;

@@ -83,6 +83,7 @@ object FormConexao: TFormConexao
     Top = 80
   end
   object FDQueryVenda: TFDQuery
+    Active = True
     Connection = FDConnection
     SQL.Strings = (
       'SELECT * FROM VENDAS')
@@ -177,47 +178,66 @@ object FormConexao: TFormConexao
     Left = 472
     Top = 80
   end
-  object FDQueryItensVendaDistinto: TFDQuery
+  object FDQueryItensVendaAux: TFDQuery
     Connection = FDConnection
     SQL.Strings = (
-      'SELECT MAX(ID) AS "ID" ,'
-      #9#9'MAX(PRODUTO_ID) AS "PRODUTO_ID" , '
-      #9#9'MAX(PRECO_UNITARIO) AS "PRECO_UNITARIO"'
+      'SELECT *'
       'FROM ITENS_VENDA'
-      'WHERE NUMERO_CONTROLE = :NUMCTR'
-      'GROUP BY PRODUTO_ID;'
-      '')
+      'WHERE VENDA_ID=:VENDAID ')
     Left = 112
-    Top = 216
+    Top = 200
     ParamData = <
       item
-        Name = 'NUMCTR'
+        Name = 'VENDAID'
         DataType = ftInteger
         ParamType = ptInput
         Value = Null
       end>
-    object FDQueryItensVendaDistintoID: TIntegerField
+    object FDAutoIncField1: TFDAutoIncField
       FieldName = 'ID'
       Origin = 'ID'
-      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
-      ReadOnly = True
+      ProviderFlags = [pfInWhere, pfInKey]
     end
-    object FDQueryItensVendaDistintoPRODUTO_ID: TIntegerField
+    object IntegerField1: TIntegerField
+      FieldName = 'VENDA_ID'
+      Origin = 'VENDA_ID'
+    end
+    object IntegerField2: TIntegerField
       FieldName = 'PRODUTO_ID'
       Origin = 'PRODUTO_ID'
-      ReadOnly = True
     end
-    object FDQueryItensVendaDistintoPRECO_UNITARIO: TBCDField
+    object IntegerField3: TIntegerField
+      FieldName = 'QUANTIDADE'
+      Origin = 'QUANTIDADE'
+    end
+    object BCDField1: TBCDField
       FieldName = 'PRECO_UNITARIO'
       Origin = 'PRECO_UNITARIO'
-      ReadOnly = True
+      Precision = 10
+      Size = 2
+    end
+    object BCDField2: TBCDField
+      FieldName = 'DESCONTO'
+      Origin = 'DESCONTO'
+      Precision = 10
+      Size = 2
+    end
+    object BCDField3: TBCDField
+      FieldName = 'SUBTOTAL'
+      Origin = 'SUBTOTAL'
+      Precision = 10
+      Size = 2
+    end
+    object BCDField4: TBCDField
+      FieldName = 'VALOR_TOTAL'
+      Origin = 'VALOR_TOTAL'
       Precision = 10
       Size = 2
     end
   end
-  object DataSourceItensVendaDistintos: TDataSource
-    DataSet = FDQueryItensVendaDistinto
+  object DataSourceItensVendaAux: TDataSource
+    DataSet = FDQueryItensVendaAux
     Left = 112
-    Top = 272
+    Top = 256
   end
 end
