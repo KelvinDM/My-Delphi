@@ -650,7 +650,7 @@ object FormCadastros: TFormCadastros
           OnClick = PanelBotaoAlterarProdClick
         end
         object PanelBotaoNovoProd: TPanel
-          Left = 409
+          Left = 408
           Top = 4
           Width = 90
           Height = 43

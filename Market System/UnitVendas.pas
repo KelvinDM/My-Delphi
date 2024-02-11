@@ -64,6 +64,10 @@ type
     procedure PanelBotaoFinalizarVendaClick(Sender: TObject);
     procedure PanelNovaVendaClick(Sender: TObject);
     procedure PanelAtualizarValorTotalClick(Sender: TObject);
+    procedure EditValorTotalChange(Sender: TObject);
+    procedure PanelNovaVendaMouseEnter(Sender: TObject);
+    procedure PanelNovaVendaMouseLeave(Sender: TObject);
+    procedure EditCodigoVendaChange(Sender: TObject);
   private
     { Private declarations }
     procedure CalcularTotal;
@@ -84,14 +88,24 @@ procedure TFormVendas.PanelInserirItemVendaClick(Sender: TObject);
 var
     AuxCodProduto, QuantidadeItem, CodCliente, QueryOriginal : String;
     ValorProduto, TotalVenda,TotalVendaItem, ValorItem, RateioItemDesc, RateioValorDesconto: Currency;
-    ValorItemSubTotal :Currency;
-    CodIdVenda,CodProduto : integer;
+    ValorItemSubTotal, CampoDescTotal :Currency;
+    CodIdVenda,CodProduto,TotalDeItens : integer;
 begin
-    CodIdVenda := StrToInt(EditCodigoVenda.Text);
+    // Verificações de campos vazios
+    if (Trim(EditCodigoVenda.Text) = '') then
+        CodIdVenda := 0
+    else
+        CodIdVenda := StrToInt(Trim(EditCodigoVenda.Text));
+
+    if (Trim(EditCodProduto.Text) = '') then
+        CodProduto := 0
+    else
+        CodProduto := StrToInt(EditCodProduto.Text);
+
+
     CodCliente := Trim(EditCodCliente.Text);
     QuantidadeItem := Trim(EditQuantidade.Text) ;
     AuxCodProduto := Trim(EditCodProduto.Text);
-    CodProduto:= StrToInt(EditCodProduto.Text);
 
     if (CodCliente = '' )  then
     begin
@@ -103,69 +117,83 @@ begin
         MessageDlg('Produto não foi preenchido para realizar a inserção!!', mtError, [mbOK], 0);
         Exit;
     end;
-    
-    if (QuantidadeItem <> '') and (QuantidadeItem <> '0') then
+
+
+    With FormConexao do
     begin
-        FormConexao.FDQueryProdutos.Close;
-        QueryOriginal := FormConexao.FDQueryProdutos.SQL.Text;
-        FormConexao.FDQueryProdutos.SQL.Text := 'SELECT * FROM PRODUTOS WHERE ID= :IDPROD ';
-        FormConexao.FDQueryProdutos.ParamByName('IDPROD').AsInteger := StrToInt(AuxCodProduto);
-        FormConexao.FDQueryProdutos.Open;
-
-        ValorProduto := FormConexao.FDQueryProdutos.FieldByName('VALOR_VENDA').AsCurrency;
-
-        if not FormConexao.FDQueryProdutos.IsEmpty then
+        if (QuantidadeItem <> '') and (QuantidadeItem <> '0') then
         begin
-            if StrToInt(QuantidadeItem) > FormConexao.FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsInteger then
+                FDQueryItensVendaAux.Params[0].AsInteger := CodIdVenda;
+                FDQueryItensVendaAux.Open;
+                 if FDQueryItensVendaAux.Locate('VENDA_ID;PRODUTO_ID',VarArrayOf([CodIdVenda,CodProduto]),[]) then
+                 begin
+                    TotalDeItens := 0;
+                    while not FDQueryItensVendaAux.Eof do
+                    begin
+
+                        TotalDeItens := FDQueryItensVendaAux.FieldByName('QUANTIDADE').AsInteger;
+                        FormConexao.FDQueryItensVendaAux.Next;
+                    end;
+                end;
+
+            FDQueryProdutos.Close;
+            QueryOriginal := FDQueryProdutos.SQL.Text;
+            FDQueryProdutos.SQL.Text := 'SELECT * FROM PRODUTOS WHERE ID= :IDPROD ';
+            FDQueryProdutos.ParamByName('IDPROD').AsInteger := StrToInt(AuxCodProduto);
+            FDQueryProdutos.Open;
+
+            ValorProduto := FDQueryProdutos.FieldByName('VALOR_VENDA').AsCurrency;
+
+            if not FDQueryProdutos.IsEmpty then
             begin
-                MessageDlg('A quantidade informada é maior do que a disponível em estoque!', mtError, [mbOK], 0);
-                FormConexao.FDQueryProdutos.Close;
-                FormConexao.FDQueryProdutos.SQL.Text := QueryOriginal;
-                Exit;
+                if StrToInt(QuantidadeItem) > FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsInteger then
+                begin
+                    MessageDlg('A quantidade informada é maior do que a disponível em estoque!', mtError, [mbOK], 0);
+                    FDQueryProdutos.Close;
+                    FDQueryProdutos.SQL.Text := QueryOriginal;
+                    Exit;
+                end;
+
+                if TotalDeItens <> 0 then
+                    TotalDeItens := StrToInt(QuantidadeItem) + TotalDeItens;
+
+
+                if TotalDeItens > FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsInteger  then
+                begin
+                    MessageDlg('A quantidade informada é maior do que a disponível em estoque!', mtError, [mbOK], 0);
+                    FDQueryProdutos.Close;
+                    FDQueryProdutos.SQL.Text := QueryOriginal;
+                    Exit;
+                end;
+
             end;
+            FDQueryProdutos.Close;
+            FDQueryProdutos.SQL.Text := QueryOriginal;
+        end
+        else
+        begin
+            MessageDlg('Informe uma quantidade de item para a venda.!', mtError, [mbOK], 0);
+            Exit;
         end;
-        FormConexao.FDQueryProdutos.Close;
-        FormConexao.FDQueryProdutos.SQL.Text := QueryOriginal;
-    end
-    else
-    begin
-        MessageDlg('Informe uma quantidade de item para a venda.!', mtError, [mbOK], 0);
-        Exit;
     end;
 
 
 
     //Calculo para venda
-    TotalVendaItem := StrToInt(QuantidadeItem) *  ValorProduto;  // 2 * 150 = 300
+    TotalVendaItem := StrToInt(QuantidadeItem) *  ValorProduto;
 
-    //Conectando com o Dbgrid
+    //Conectando Dbgrid/Inserindo/Atualizando = FDQueryItensVendaAux
     With FormConexao do
     begin
         FDQueryItensVendaAux.Params[0].AsInteger := CodIdVenda;
         FDQueryItensVendaAux.Open;
-        if FDQueryItensVendaAux.RecordCount > 0 then
+        if FDQueryItensVendaAux.Locate('VENDA_ID;PRODUTO_ID',VarArrayOf([CodIdVenda,CodProduto]),[]) then
         begin
-            if FormConexao.FDQueryItensVendaAux.Locate('VENDA_ID;PRODUTO_ID',VarArrayOf([CodIdVenda,CodProduto]),[]) then
-            begin
-                // AuxCodProduto
-                FDQueryItensVendaAux.Edit;
-                FDQueryItensVendaAux.FieldByName('QUANTIDADE').Asinteger := FDQueryItensVendaAux.FieldByName('QUANTIDADE').Asinteger + StrToInt(EditQuantidade.Text);
-                FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency := FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency + TotalVendaItem;
-                FDQueryItensVendaAux.Post;
-                FDConnection.Commit;
-            end
-            else
-            begin
-                FDQueryItensVendaAux.Insert;
-                FDQueryItensVendaAux.FieldByName('VENDA_ID').AsInteger := StrToInt(EditCodigoVenda.text);
-                FDQueryItensVendaAux.FieldByName('PRODUTO_ID').AsInteger := StrToInt (EditCodProduto.Text);
-                FDQueryItensVendaAux.FieldByName('QUANTIDADE').AsInteger := StrToInt (EditQuantidade.Text);
-                FDQueryItensVendaAux.FieldByName('PRECO_UNITARIO').AsCurrency := ValorProduto;
-                FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency := TotalVendaItem;
-                //Commit
-                FDQueryItensVendaAux.Post;
-                FDConnection.Commit;
-            end;
+            FDQueryItensVendaAux.Edit;
+            FDQueryItensVendaAux.FieldByName('QUANTIDADE').Asinteger := FDQueryItensVendaAux.FieldByName('QUANTIDADE').Asinteger + StrToInt(EditQuantidade.Text);
+            FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency := FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency + TotalVendaItem;
+            FDQueryItensVendaAux.Post;
+            FDConnection.Commit;
         end
         else
         begin
@@ -175,14 +203,20 @@ begin
             FDQueryItensVendaAux.FieldByName('QUANTIDADE').AsInteger := StrToInt (EditQuantidade.Text);
             FDQueryItensVendaAux.FieldByName('PRECO_UNITARIO').AsCurrency := ValorProduto;
             FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency := TotalVendaItem;
-            //Commit
             FDQueryItensVendaAux.Post;
             FDConnection.Commit;
+
+            //Ativando botão de excluir
+            PanelExcluitItem.Enabled:= True;
+            PanelExcluitItem.Color := ClRed;
+            PanelExcluitItem.Font.Color := ClWhite;
+            PanelExcluitItem.Font.Style := [fsBold];
         end;
     end;
 
         
 
+   CampoDescTotal := StrParaFloat(EditDescontoTotal.Text);
 
     //Obter o total da venda de todos os itens sem o desconto
     With FormConexao do
@@ -197,9 +231,20 @@ begin
             FormConexao.FDQueryItensVendaAux.Next;
         end;
     end;
-  
+
+    if RbPorcentagem.Checked then
+        CampoDescTotal := (StrParaFloat(EditDescontoTotal.Text) / 100)  *  TotalVenda;
+
+
+    if  (CampoDescTotal > TotalVenda) then
+    begin
+        MessageDlg('Erro: O valor do desconto informado é maior do que o valor total da venda!',mtError, [mbOK], 0, mbOK);
+        Exit;
+    end;
+
+
+
     // Calculo realizado de rateio para proporção em cada item
-//--------------------------------------------
     With FormConexao do
     begin
         FDQueryItensVendaAux.First;
@@ -207,34 +252,27 @@ begin
         begin
             ValorItemSubTotal := FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency;
             RateioItemDesc := ValorItemSubTotal / TotalVenda;
-
-            RateioValorDesconto := RateioItemDesc * StrToCurr(EditDescontoTotal.Text);
+            RateioValorDesconto := RateioItemDesc * CampoDescTotal;
 
             FDQueryItensVendaAux.Edit;
-            FDQueryItensVendaAux.FieldByName('DESCONTO').AsCurrency := Round(RateioValorDesconto);
+            FDQueryItensVendaAux.FieldByName('DESCONTO').AsCurrency := RoundTo(RateioValorDesconto, -2);
             TotalVenda := TotalVenda - RateioValorDesconto;
-            
+
             FDQueryItensVendaAux.Post;
             FDQueryItensVendaAux.Next;
         end;
     end;
 
 
-    //Arredonda venda
-    TotalVenda := Ceil(TotalVenda);
 
     //Atualizando total da venda
     EditValorTotal.Text :=  FloatToStrF(TotalVenda, ffNumber, 15, 2);
-
-    FormConexao.FDQueryProdutos.SQL.Text := QueryOriginal;
     FormConexao.FDQueryItensVendaAux.Refresh;
     DBGridItemVenda.Refresh;
 end;
 
 procedure TFormVendas.PanelNovaVendaClick(Sender: TObject);
 begin
-    //
-
     EditCodigoVenda.Enabled := False;
     EditNomeClienteVenda.Enabled := True;
     EditCodCliente.Enabled := True;
@@ -247,11 +285,44 @@ begin
     PanelExcluitItem.Enabled := True;
     EditDescontoTotal.Enabled := True;
     PanelBotaoFinalizarVenda.Enabled := True;
+    RbValorReal.Enabled := True;
+    RbPorcentagem.Enabled := True;
+    PanelInserirItemVenda.Color:= $005E8EFF;
+    PanelInserirItemVenda.Font.Color := ClWhite;
+
+
+    //Deixando Campos vazios
+    EditCodigoVenda.Text := '';
+    EditCodCliente.Text := '';
+    EditNomeClienteVenda.Text := '';
+    EditCodProduto.Text := '';
+    EditNomeProduto.Text := '';
+    EditQuantidade.Text := '';
+    EditDescontoTotal.Text := '';
+    EditValorTotal.Text := '';
+
+
+    PanelNovaVenda.Visible := False;
+
+    if FormConexao.FDQueryItensVendaAux.Active then
+        FormConexao.FDQueryItensVendaAux.Close;
 
     
-    PanelNovaVenda.Visible := False;
-    
-    
+end;
+
+procedure TFormVendas.PanelNovaVendaMouseEnter(Sender: TObject);
+begin
+    //
+    PanelNovaVenda.Color := clYellow;
+    PanelNovaVenda.Font.Color := $00191919;
+    PanelNovaVenda.Font.Style := [fsBold];
+end;
+
+procedure TFormVendas.PanelNovaVendaMouseLeave(Sender: TObject);
+begin
+    PanelNovaVenda.Color := $00191919;
+    PanelNovaVenda.Font.Color := ClWhite;
+    PanelNovaVenda.Font.Style := [fsBold];
 end;
 
 procedure TFormVendas.RbPorcentagemClick(Sender: TObject);
@@ -263,26 +334,54 @@ end;
 
 procedure TFormVendas.PanelBotaoVerificarEstoqueClick(Sender: TObject);
 var
-    CodProduto, QueryOriginal : String;
+    QueryOriginal : String;
+    TotalDeItens, CodIdVenda, CodProduto : Integer;
 begin
     try
-        CodProduto :=  Trim(EditCodProduto.Text);
-        if CodProduto<> '' then
+        With FormConexao do
         begin
-            FormConexao.FDQueryProdutos.Close;
-            QueryOriginal := FormConexao.FDQueryProdutos.SQL.Text;
-            FormConexao.FDQueryProdutos.SQL.Text := 'SELECT * FROM PRODUTOS WHERE ID= :IDPROD ';
-            FormConexao.FDQueryProdutos.ParamByName('IDPROD').AsInteger := StrToInt(CodProduto);
-            FormConexao.FDQueryProdutos.Open;
+            // Verificações de campos vazios
+            if (Trim(EditCodigoVenda.Text) = '') then
+                CodIdVenda := 0
+            else
+                CodIdVenda := StrToInt(Trim(EditCodigoVenda.Text));
 
-            if not FormConexao.FDQueryProdutos.IsEmpty then
-                ShowMessage('Produto: ' + FormConexao.FDQueryProdutos.FieldByName('DESCRICAO').AsString + sLineBreak +
-                 'SALDO EM ESTOQUE: ' + FormConexao.FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsString);
+            if (Trim(EditCodProduto.Text) = '') then
+                CodProduto := 0
+            else
+                CodProduto := StrToInt(EditCodProduto.Text);
 
-            FormConexao.FDQueryProdutos.SQL.Text:= QueryOriginal;
-        end
-        else
-            ShowMessage('Código do produto não selecionado.!!');
+            if (Trim(EditCodProduto.Text) <> '') then
+            begin
+
+                FDQueryItensVendaAux.Params[0].AsInteger := CodIdVenda;
+                FDQueryItensVendaAux.Open;
+                 if FDQueryItensVendaAux.Locate('VENDA_ID;PRODUTO_ID',VarArrayOf([CodIdVenda,CodProduto]),[]) then
+                    TotalDeItens := FDQueryItensVendaAux.FieldByName('QUANTIDADE').AsInteger
+                 else
+                    TotalDeItens := 0;
+
+                FDQueryProdutos.Close;
+                QueryOriginal := FDQueryProdutos.SQL.Text;
+                FDQueryProdutos.SQL.Text := 'SELECT * FROM PRODUTOS WHERE ID= :IDPROD ';
+                FDQueryProdutos.ParamByName('IDPROD').AsInteger := CodProduto;
+                FDQueryProdutos.Open;
+
+                if TotalDeItens <> 0 then
+                    TotalDeItens :=  FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsInteger - TotalDeItens
+                else
+                    TotalDeItens := FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsInteger;
+
+
+                if not FDQueryProdutos.IsEmpty then
+                    ShowMessage('Produto: ' + FDQueryProdutos.FieldByName('DESCRICAO').AsString + sLineBreak +
+                     'SALDO EM ESTOQUE: ' + intToStr(TotalDeItens));
+
+                FDQueryProdutos.SQL.Text:= QueryOriginal;
+            end
+            else
+                ShowMessage('Código do produto não selecionado.!!');
+        end;
     Except
         on E: Exception do
         begin
@@ -318,46 +417,94 @@ var
     TotalVenda: Currency;
     Desconto: Currency;
     DataAtual: TDateTime;
+    CodigoVenda,MsgResult : Integer;
 begin
 //
-    EditCodigoVenda.Enabled := False;
-    EditNomeClienteVenda.Enabled := False;
-    EditCodCliente.Enabled := False;
-    EditNomeProduto.Enabled := False;
-    EditCodProduto.Enabled := False;
-    ButtonBuscaCliente.Enabled := False;
-    ButtonBuscaProduto.Enabled := False;
-    EditQuantidade.Enabled := False;
-    PanelInserirItemVenda.Enabled := False;
-    PanelExcluitItem.Enabled := False;
-    EditDescontoTotal.Enabled := False;
-    PanelBotaoFinalizarVenda.Enabled := False;
-    
-    PanelNovaVenda.Visible := True;
+    CodigoVenda :=  StrToInt(EditCodigoVenda.Text);
+    DataAtual := Now;
 
-  
+    MsgResult := MessageDlg('Deseja finalizar a venda?', mtConfirmation, mbYesNo, 0);
 
 
-    if FormConexao.FDQueryVenda.Locate('ID', EditCodigoVenda.Text) then
+    if MsgResult = MrYes then
     begin
-        DataAtual := Now;
-        FormConexao.FDQueryVenda.Edit; 
-        FormConexao.FDQueryVenda.FieldByName('ID_CLIENTE').Asinteger :=   StrToInt(EditCodCliente.Text);
-        FormConexao.FDQueryVenda.FieldByName('VALOR_TOTAL').AsCurrency := StrToCurr(EditValorTotal.Text);
-        FormConexao.FDQueryVenda.FieldByName('DATA_VENDA').AsDateTime := DataAtual;
-        FormConexao.FDQueryVenda.FieldByName('DESCONTO_CALOR').AsCurrency :=  StrToCurr(EditDescontoTotal.Text);                     
-        FormConexao.FDQueryVenda.Post;
-    end
+        //Desativando Edits e Botões
+        EditCodigoVenda.Enabled := False;
+        EditNomeClienteVenda.Enabled := False;
+        EditCodCliente.Enabled := False;
+        EditNomeProduto.Enabled := False;
+        EditCodProduto.Enabled := False;
+        ButtonBuscaCliente.Enabled := False;
+        ButtonBuscaProduto.Enabled := False;
+        EditQuantidade.Enabled := False;
+        PanelInserirItemVenda.Enabled := False;
+        EditDescontoTotal.Enabled := False;
+        PanelBotaoFinalizarVenda.Enabled := False;
+
+        //Deixando visivel Botão da nova venda
+        PanelNovaVenda.Visible := True;
+
+        //Desativando Botão Excluir
+        PanelExcluitItem.Enabled:= False;
+        PanelExcluitItem.Color := clSilver;
+        PanelExcluitItem.Font.Color := ClBlack;
+        PanelExcluitItem.Font.Style := [fsBold];
+        //Desativando Botão Finalizar
+        PanelBotaoFinalizarVenda.Color := clSilver;
+        PanelBotaoFinalizarVenda.Font.Color:= ClBlack;
+        PanelBotaoFinalizarVenda.Enabled := False;
+        //Desativando Botão de Cancelar venda
+        PanelBotaoCancelarVenda.Enabled := False;
+        PanelBotaoCancelarVenda.Color:= ClSilver;
+        PanelBotaoCancelarVenda.Font.Color := ClBlack;
+        PanelBotaoCancelarVenda.Font.Style := [fsBold];
+        //Desativando Botão de Inserir
+        PanelInserirItemVenda.Enabled := False;
+        PanelInserirItemVenda.Color := ClSilver;
+        PanelInserirItemVenda.Font.Color :=  ClBlack;
+        PanelInserirItemVenda.Font.Style := [fsBold];
+        //Desativando Botão de Atualizar Valor
+        PanelAtualizarValorTotal.Enabled := False;
+        PanelAtualizarValorTotal.Color:= ClSilver;
+        PanelAtualizarValorTotal.Font.Color :=  ClBlack;
+        PanelAtualizarValorTotal.Font.Style := [fsBold];
+        //Desativando Radio Buttons
+        RbValorReal.Enabled := False;
+        RbPorcentagem.Enabled := False;
+
+
+
+        With FormConexao do
+        begin
+            if FDQueryVenda.Locate('ID', CodigoVenda) then
+            begin
+                FDQueryVenda.Edit;
+                FDQueryVenda.FieldByName('ID_CLIENTE').Asinteger :=   StrToInt(EditCodCliente.Text);
+                FDQueryVenda.FieldByName('VALOR_TOTAL').AsCurrency := StrParaFloat(EditValorTotal.Text);
+                FDQueryVenda.FieldByName('DATA_VENDA').AsDateTime := DataAtual;
+                FDQueryVenda.FieldByName('DESCONTO_VALOR').AsCurrency :=  StrParaFloat(EditDescontoTotal.Text);
+                FDQueryVenda.Post;
+                FDConnection.Commit;
+            end;
+        end;
+
+        //Fechando Query da Grid
+        //FormConexao.FDQueryItensVendaAux.Close;
+
+    end;
 
 
 end;
 
 procedure TFormVendas.PanelAtualizarValorTotalClick(Sender: TObject);
 var
-    TotalVenda, RateioItemDesc, RateioValorDesconto, ValorItemSubTotal, CampoDescTotal,CampoValorTotal: Currency;
+    TotalVenda, TotalVendaAux, RateioItemDesc, RateioValorDesconto, ValorItemSubTotal, CampoDescTotal,CampoValorTotal: Currency;
 begin
 
     CampoDescTotal := StrParaFloat(EditDescontoTotal.Text);
+
+    if CampoDescTotal = 0 then
+        ShowMessage('Nenhum valor de desconto informado!');
 
     //Obter o total da venda de todos os itens sem o desconto
     With FormConexao do
@@ -369,16 +516,20 @@ begin
         begin
 
             TotalVenda := TotalVenda + FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency;
+
             FormConexao.FDQueryItensVendaAux.Next;
         end;
     end;
 
+    if RbPorcentagem.Checked then
+        CampoDescTotal := (StrParaFloat(EditDescontoTotal.Text) / 100)  *  TotalVenda;
+
+    TotalVendaAux := TotalVenda;
     if  (CampoDescTotal > TotalVenda) then
     begin
         MessageDlg('Erro: O valor do desconto informado é maior do que o valor total da venda!',mtError, [mbOK], 0, mbOK);
         Exit;
     end;
-
 
 
     // Calculo realizado de rateio para proporção em cada item
@@ -388,8 +539,8 @@ begin
         while not FDQueryItensVendaAux.Eof do
         begin
             ValorItemSubTotal := FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency;
-            RateioItemDesc := ValorItemSubTotal / TotalVenda;
-            RateioValorDesconto := RoundTo(RateioItemDesc, -3) * StrToFloat(EditDescontoTotal.Text);
+            RateioItemDesc := ValorItemSubTotal / TotalVendaAux;
+            RateioValorDesconto := RateioItemDesc * CampoDescTotal;
 
             FDQueryItensVendaAux.Edit;
             FDQueryItensVendaAux.FieldByName('DESCONTO').AsCurrency := RoundTo(RateioValorDesconto, -2);
@@ -426,6 +577,9 @@ begin
         EditNomeProduto.Text := '';
         EditNomeClienteVenda.Text := '';
         EditQuantidade.Text := '';
+        EditValorTotal.Text := '';
+        EditDescontoTotal.Text := '';
+
 
         //Deletando Itens :)
         With FormConexao do
@@ -446,10 +600,10 @@ begin
         //Deletando Venda(s) :)
         With FormConexao do
         begin
+            FDQueryVenda.Close;
+            FDQueryVenda.Open;
             while not FDQueryVenda.Eof do
             begin
-                FDQueryVenda.Close;
-                FDQueryVenda.Open;
                 if FDQueryVenda.Locate('ID', CodigoVenda, []) then
                     FDQueryVenda.Delete
                 else
@@ -460,12 +614,15 @@ begin
         end;
 
     end;
-  
+
 end;
 
 procedure TFormVendas.PanelBotaoFecharClick(Sender: TObject);
 begin
-  Self.Close;
+    if FormConexao.FDQueryItensVendaAux.Active then
+        FormConexao.FDQueryItensVendaAux.Close;
+
+    Self.Close;
 end;
 
 
@@ -503,12 +660,13 @@ end;
 
 procedure TFormVendas.PanelExcluitItemClick(Sender: TObject);
 var
-    TotalVenda, ValorItemSubTotal, RateioValorDesconto, RateioItemDesc: Currency;
+    TotalVenda, ValorItemSubTotal, RateioValorDesconto, RateioItemDesc, CampoDescTotal: Currency;
+    ItemExiste: Boolean;
 begin
-//
     FormConexao.FDQueryItensVendaAux.Delete;
     FormConexao.FDConnection.Commit;
     FormConexao.FDQueryItensVendaAux.Refresh;
+    CampoDescTotal := StrParaFloat(EditDescontoTotal.Text);
 
 
     //Obter o total da venda de todos os itens sem o desconto
@@ -516,13 +674,23 @@ begin
     begin
         FDQueryItensVendaAux.First ;
         TotalVenda := 0;
-
+        ItemExiste := False;
         while not FDQueryItensVendaAux.Eof do
         begin
-
+            ItemExiste:= True;
             TotalVenda := TotalVenda + FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency;
             FormConexao.FDQueryItensVendaAux.Next;
         end;
+    end;
+
+
+    if RbPorcentagem.Checked then
+        CampoDescTotal := (StrParaFloat(EditDescontoTotal.Text) / 100)  *  TotalVenda;
+
+    if  (CampoDescTotal > TotalVenda) then
+    begin
+        CampoDescTotal := 0;
+        EditDescontoTotal.Text := '0';
     end;
 
 
@@ -534,7 +702,7 @@ begin
         begin
             ValorItemSubTotal := FDQueryItensVendaAux.FieldByName('SUBTOTAL').AsCurrency;
             RateioItemDesc := ValorItemSubTotal / TotalVenda;
-            RateioValorDesconto := RoundTo(RateioItemDesc, -3) * StrToFloat(EditDescontoTotal.Text);
+            RateioValorDesconto := RateioItemDesc * CampoDescTotal;
 
             FDQueryItensVendaAux.Edit;
             FDQueryItensVendaAux.FieldByName('DESCONTO').AsCurrency := RoundTo(RateioValorDesconto, -2);
@@ -544,6 +712,16 @@ begin
             FDQueryItensVendaAux.Next;
         end;
     end;
+
+    //Desativando Botão Excluir
+    if not ItemExiste then
+    begin
+        PanelExcluitItem.Enabled:= False;
+        PanelExcluitItem.Color := clSilver;
+        PanelExcluitItem.Font.Color := ClBlack;
+        PanelExcluitItem.Font.Style := [fsBold];
+    end;
+
 
     //Atualizando total da venda
     EditValorTotal.Text :=  FloatToStrF(TotalVenda, ffNumber, 15, 2);
@@ -660,6 +838,42 @@ begin
     PermitirApenasNumeros(Key);
 end;
 
+procedure TFormVendas.EditValorTotalChange(Sender: TObject);
+begin
+    //
+    if (Trim(EditValorTotal.Text) <> '') and (Trim(EditValorTotal.Text) <> '0,00') then
+    begin
+        PanelBotaoFinalizarVenda.Color := ClLime;
+        PanelBotaoFinalizarVenda.Font.Color := ClWhite;
+        PanelBotaoFinalizarVenda.Enabled := True;
+    end
+    else
+    begin
+        PanelBotaoFinalizarVenda.Color := clSilver;
+        PanelBotaoFinalizarVenda.Font.Color := ClBlack;
+        PanelBotaoFinalizarVenda.Enabled := False;
+    end;
+end;
+
+procedure TFormVendas.EditCodigoVendaChange(Sender: TObject);
+begin
+    if (Trim(EditCodigoVenda.Text) <> '') then
+    begin
+        PanelBotaoCancelarVenda.Color := clRed;
+        PanelBotaoCancelarVenda.Font.Color := ClWhite;
+        PanelBotaoCancelarVenda.Font.Style := [fsBold];
+        PanelBotaoCancelarVenda.Enabled := True;
+
+    end
+    else
+    begin
+        PanelBotaoCancelarVenda.Color := clSilver;
+        PanelBotaoCancelarVenda.Font.Color := ClBlack;
+        PanelBotaoCancelarVenda.Font.Style := [fsBold];
+        PanelBotaoCancelarVenda.Enabled := False;
+    end;
+end;
+
 procedure TFormVendas.EditDescontoTotalExit(Sender: TObject);
 var
     Valor: Double;
@@ -693,8 +907,11 @@ begin
 
     if RbPorcentagem.Checked then
         PermitirApenasNumeros(Key);
+
     if RbValorReal.Checked then
         PermitirApenasNumeros2(Key);
+
+
 
     if (Key = #13) and RbPorcentagem.Checked then
     begin
@@ -708,7 +925,6 @@ begin
     end;
 
 
-        //Problemas arrumar.
     if (Key = #13) and RbValorReal.Checked then
     begin
         if Trim(EditDescontoTotal.Text) <> '' then

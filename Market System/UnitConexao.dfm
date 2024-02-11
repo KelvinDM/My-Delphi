@@ -179,6 +179,7 @@ object FormConexao: TFormConexao
     Top = 80
   end
   object FDQueryItensVendaAux: TFDQuery
+    Active = True
     Connection = FDConnection
     SQL.Strings = (
       'SELECT *'

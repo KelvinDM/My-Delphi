@@ -186,8 +186,15 @@ object FormVendas: TFormVendas
         Height = 66
         Cursor = crHandPoint
         Caption = 'Finalizar Venda'
-        Color = 8454016
+        Color = clSilver
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
         ParentBackground = False
+        ParentFont = False
         TabOrder = 0
         OnClick = PanelBotaoFinalizarVendaClick
       end
@@ -205,9 +212,10 @@ object FormVendas: TFormVendas
         Font.Style = []
         ParentFont = False
         TabOrder = 1
+        OnChange = EditValorTotalChange
       end
       object EditQuantidade: TEdit
-        Left = 147
+        Left = 149
         Top = 234
         Width = 202
         Height = 36
@@ -222,7 +230,7 @@ object FormVendas: TFormVendas
       end
       object EditDescontoTotal: TEdit
         Left = 641
-        Top = 466
+        Top = 463
         Width = 193
         Height = 36
         Font.Charset = DEFAULT_CHARSET
@@ -242,11 +250,13 @@ object FormVendas: TFormVendas
         Height = 46
         Cursor = crHandPoint
         Caption = 'Inserir'
+        Color = 6196991
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clWhite
         Font.Height = -16
         Font.Name = 'Segoe UI'
-        Font.Style = []
+        Font.Style = [fsBold]
+        ParentBackground = False
         ParentFont = False
         TabOrder = 4
         OnClick = PanelInserirItemVendaClick
@@ -258,11 +268,14 @@ object FormVendas: TFormVendas
         Height = 46
         Cursor = crHandPoint
         Caption = 'Excluir'
+        Color = clSilver
+        Enabled = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
         Font.Name = 'Segoe UI'
-        Font.Style = []
+        Font.Style = [fsBold]
+        ParentBackground = False
         ParentFont = False
         TabOrder = 5
         OnClick = PanelExcluitItemClick
@@ -282,10 +295,16 @@ object FormVendas: TFormVendas
       end
       object ButtonBuscaCliente: TButton
         Left = 348
-        Top = 77
+        Top = 85
         Width = 75
         Height = 36
         Caption = 'Buscar'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
         TabOrder = 7
         OnClick = ButtonBuscaClienteClick
       end
@@ -336,12 +355,13 @@ object FormVendas: TFormVendas
         Height = 66
         Cursor = crHandPoint
         Caption = 'Cancelar Venda'
-        Color = clRed
+        Color = clSilver
+        Enabled = False
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWhite
-        Font.Height = -12
+        Font.Color = clBlack
+        Font.Height = -16
         Font.Name = 'Segoe UI'
-        Font.Style = []
+        Font.Style = [fsBold]
         ParentBackground = False
         ParentFont = False
         TabOrder = 10
@@ -350,12 +370,18 @@ object FormVendas: TFormVendas
       object PanelBotaoVerificarEstoque: TPanel
         Left = 429
         Top = 156
-        Width = 98
+        Width = 108
         Height = 36
         Cursor = crHandPoint
         Caption = 'Verificar estoque'
         Color = 10928383
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
         ParentBackground = False
+        ParentFont = False
         TabOrder = 11
         OnClick = PanelBotaoVerificarEstoqueClick
       end
@@ -463,12 +489,18 @@ object FormVendas: TFormVendas
         Width = 75
         Height = 36
         Caption = 'Buscar'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
         TabOrder = 15
         OnClick = ButtonBuscaProdutoClick
       end
       object EditCodigoVenda: TEdit
         Left = 100
-        Top = 16
+        Top = 18
         Width = 69
         Height = 36
         Enabled = False
@@ -479,6 +511,7 @@ object FormVendas: TFormVendas
         Font.Style = []
         ParentFont = False
         TabOrder = 16
+        OnChange = EditCodigoVendaChange
       end
       object PanelNovaVenda: TPanel
         Left = 328
@@ -487,32 +520,34 @@ object FormVendas: TFormVendas
         Height = 66
         Cursor = crHandPoint
         Caption = 'Nova Venda'
-        Color = 10928383
+        Color = 1644825
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWhite
-        Font.Height = -12
+        Font.Height = -16
         Font.Name = 'Segoe UI'
-        Font.Style = []
+        Font.Style = [fsBold]
         ParentBackground = False
         ParentFont = False
         TabOrder = 17
         Visible = False
         OnClick = PanelNovaVendaClick
+        OnMouseEnter = PanelNovaVendaMouseEnter
+        OnMouseLeave = PanelNovaVendaMouseLeave
       end
       object PanelAtualizarValorTotal: TPanel
-        Left = 599
-        Top = 358
-        Width = 250
-        Height = 66
+        Left = 641
+        Top = 373
+        Width = 193
+        Height = 51
         Cursor = crHandPoint
         Caption = 'Atualizar Valor Total'
         Color = clSilver
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWhite
-        Font.Height = -12
+        Font.Height = -16
         Font.Name = 'Segoe UI'
-        Font.Style = []
+        Font.Style = [fsBold]
         ParentBackground = False
         ParentFont = False
         TabOrder = 18

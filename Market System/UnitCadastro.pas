@@ -334,6 +334,11 @@ end;
 
 procedure TFormCadastros.LabelClientesClick(Sender: TObject);
 begin
+    //Ativando QueryCliente caso não esteja ativa
+    if not FormConexao.FDQueryClientes.Active then
+        FormConexao.FDQueryClientes.Open;
+
+
     //Tela de Cadastro de Clientes pelo Page
     PageControlClientePrinc.ActivePageIndex := 2;
 
@@ -346,6 +351,10 @@ end;
 
 procedure TFormCadastros.LabelProdutosClick(Sender: TObject);
 begin
+    //Ativando QueryProdutos caso não esteja ativa
+    if not FormConexao.FDQueryProdutos.Active then
+        FormConexao.FDQueryProdutos.Open;
+
     //Tela de Cadastro de Produtos pelo Page
     PageControlClientePrinc.ActivePageIndex := 1;
 end;
