@@ -488,9 +488,6 @@ begin
             end;
         end;
 
-        //Fechando Query da Grid
-        //FormConexao.FDQueryItensVendaAux.Close;
-
     end;
 
 
@@ -843,7 +840,7 @@ begin
     //
     if (Trim(EditValorTotal.Text) <> '') and (Trim(EditValorTotal.Text) <> '0,00') then
     begin
-        PanelBotaoFinalizarVenda.Color := ClLime;
+        PanelBotaoFinalizarVenda.Color := clGreen;
         PanelBotaoFinalizarVenda.Font.Color := ClWhite;
         PanelBotaoFinalizarVenda.Enabled := True;
     end

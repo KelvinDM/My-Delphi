@@ -56,6 +56,23 @@ type
     BCDField3: TBCDField;
     BCDField4: TBCDField;
     DataSourceItensVendaAux: TDataSource;
+    FDQueryRelatVendas: TFDQuery;
+    DataSourceRelatVendas: TDataSource;
+    FDQueryRelatVendasID: TFDAutoIncField;
+    FDQueryRelatVendasID_CLIENTE: TIntegerField;
+    FDQueryRelatVendasNOME_CLIENTE: TStringField;
+    FDQueryRelatVendasNUMERO_TELEFONE: TStringField;
+    FDQueryRelatVendasNUMERO_CELULAR: TStringField;
+    FDQueryRelatVendasVALOR_TOTAL: TFloatField;
+    FDQueryRelatVendasDESCONTO_VALOR: TBCDField;
+    FDQueryRelatVendasDESCONTO_PERC: TBCDField;
+    FDQueryRelatVendasDATA_VENDA: TDateField;
+    FDQueryRelatVendasPRODUTO_ID: TIntegerField;
+    FDQueryRelatVendasQUANTIDADE: TIntegerField;
+    FDQueryRelatVendasPRECO_UNITARIO: TBCDField;
+    FDQueryRelatVendasDESCONTO: TBCDField;
+    FDQueryRelatVendasSUBTOTAL: TBCDField;
+    FDQueryRelatVendasNOME_PRODUTO: TStringField;
     procedure FDQueryItensVendaDistintoAfterPost(DataSet: TDataSet);
   private
     { Private declarations }

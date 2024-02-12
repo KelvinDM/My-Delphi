@@ -142,6 +142,10 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UnitFuncoesDiversas.pas"/>
+        <DCCReference Include="UnitFiltroRelatórios.pas">
+            <Form>FormFiltroRelatórios</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
