@@ -72,7 +72,6 @@ end;
 
 procedure TFormFiltroRelatórios.PanelImprimirClick(Sender: TObject);
 begin
-    FormConexao.FDQueryRelatVendas.Refresh;
     FrxRelatorioVendas.LoadFromFile('C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Relatórios\LISTA.FR3');
     FrxRelatorioVendas.ShowReport;
 end;

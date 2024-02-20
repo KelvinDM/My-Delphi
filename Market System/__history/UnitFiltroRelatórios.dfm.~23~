@@ -81,7 +81,6 @@
       TabOrder = 1
       OnClick = PanelBotaoFecharClick
       OnMouseEnter = PanelBotaoFecharMouseEnter
-      OnMouseLeave = PanelBotaoFecharMouseLeave
     end
   end
   object PanelImprimir: TPanel

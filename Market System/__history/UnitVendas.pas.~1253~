@@ -493,7 +493,6 @@ begin
                 end;
                 FDQueryItensVendaAux.Next;
             end;
-            FDQueryProdutos.Close;
         end;
 
 

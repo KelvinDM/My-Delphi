@@ -476,7 +476,6 @@ begin
         //Baixando estoque dos produtos
         With FormConexao do
         begin
-            FDQueryProdutos.Open;
             FDQueryItensVendaAux.Params[0].AsInteger := CodigoVenda;
             FDQueryItensVendaAux.Open;
             FDQueryItensVendaAux.First;
@@ -487,14 +486,18 @@ begin
                 if FDQueryProdutos.Locate('ID', CodigoProduto) then
                 begin
                     FDQueryProdutos.Edit;
-                    FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsInteger:= FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsInteger - QuantProdutos;
+                    FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsInteger:= QuantProdutos;
                     FDQueryProdutos.Post;
                     FDConnection.Commit;
                 end;
-                FDQueryItensVendaAux.Next;
             end;
-            FDQueryProdutos.Close;
         end;
+
+
+
+
+
+        //SELECT * FROM PRODUTOS
 
 
         With FormConexao do

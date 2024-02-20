@@ -474,9 +474,30 @@ begin
 
 
         //Baixando estoque dos produtos
+//        With FormConexao do
+//        begin
+//            FDQueryItensVendaAux.Params[0].AsInteger := CodigoVenda;
+//            FDQueryItensVendaAux.Open;
+//            FDQueryItensVendaAux.First;
+//            while not FDQueryItensVendaAux.Eof do
+//            begin
+//                CodigoProduto := FDQueryItensVendaAux.FieldByName('PRODUTO_ID').AsInteger;
+//                QuantProdutos := FDQueryItensVendaAux.FieldByName('QUANTIDADE').AsInteger;
+//                if FDQueryProdutos.Locate('ID', CodigoProduto) then
+//                begin
+//                    FDQueryProdutos.Edit;
+//                    FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsInteger:= QuantProdutos;
+//                    FDQueryProdutos.Post;
+//                    FDConnection.Commit;
+//                end;
+//            end;
+//        end;
+
+
+        // Baixando estoque dos produtos
         With FormConexao do
         begin
-            FDQueryProdutos.Open;
+            FDQueryProdutos.Open();
             FDQueryItensVendaAux.Params[0].AsInteger := CodigoVenda;
             FDQueryItensVendaAux.Open;
             FDQueryItensVendaAux.First;
@@ -487,14 +508,19 @@ begin
                 if FDQueryProdutos.Locate('ID', CodigoProduto) then
                 begin
                     FDQueryProdutos.Edit;
-                    FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsInteger:= FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsInteger - QuantProdutos;
+                    // Subtrai a quantidade vendida do saldo atual do estoque
+                    FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsInteger :=
+                      FDQueryProdutos.FieldByName('SALDO_ESTOQUE').AsInteger - QuantProdutos;
                     FDQueryProdutos.Post;
-                    FDConnection.Commit;
                 end;
                 FDQueryItensVendaAux.Next;
             end;
-            FDQueryProdutos.Close;
+            FDConnection.Commit;
         end;
+
+
+
+        //SELECT * FROM PRODUTOS
 
 
         With FormConexao do

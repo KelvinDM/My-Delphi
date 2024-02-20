@@ -59,7 +59,7 @@ begin
     //
     PanelBotaoFechar.Color := ClRed;
     PanelBotaoFechar.Font.Color := ClWhite;
-        PanelBotaoFechar.Font.Style := [fsBold];
+        PanelBotaoFechar.Font.Style := [Bold];
 
 end;
 
@@ -67,12 +67,11 @@ procedure TFormFiltroRelatórios.PanelBotaoFecharMouseLeave(Sender: TObject);
 begin
     PanelBotaoFechar.Color := $00191919;
     PanelBotaoFechar.Font.Color := ClWhite;
-    PanelBotaoFechar.Font.Style := [];
+
 end;
 
 procedure TFormFiltroRelatórios.PanelImprimirClick(Sender: TObject);
 begin
-    FormConexao.FDQueryRelatVendas.Refresh;
     FrxRelatorioVendas.LoadFromFile('C:\Users\Thays\Documents\Estudo e Projetos de programas DELPHI\Market System\Relatórios\LISTA.FR3');
     FrxRelatorioVendas.ShowReport;
 end;

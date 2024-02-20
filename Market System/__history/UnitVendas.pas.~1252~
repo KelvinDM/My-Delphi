@@ -493,8 +493,10 @@ begin
                 end;
                 FDQueryItensVendaAux.Next;
             end;
-            FDQueryProdutos.Close;
         end;
+
+
+        //SELECT * FROM PRODUTOS
 
 
         With FormConexao do

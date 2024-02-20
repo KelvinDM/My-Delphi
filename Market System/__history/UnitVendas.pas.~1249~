@@ -476,7 +476,7 @@ begin
         //Baixando estoque dos produtos
         With FormConexao do
         begin
-            FDQueryProdutos.Open;
+            FDQueryProdutos.Open();
             FDQueryItensVendaAux.Params[0].AsInteger := CodigoVenda;
             FDQueryItensVendaAux.Open;
             FDQueryItensVendaAux.First;
@@ -491,10 +491,14 @@ begin
                     FDQueryProdutos.Post;
                     FDConnection.Commit;
                 end;
-                FDQueryItensVendaAux.Next;
             end;
-            FDQueryProdutos.Close;
         end;
+
+
+
+
+
+        //SELECT * FROM PRODUTOS
 
 
         With FormConexao do
